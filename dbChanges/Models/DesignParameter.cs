@@ -26,4 +26,8 @@ public partial class DesignParameter
     public double? MinValue { get; set; }
 
     public double? MaxValue { get; set; }
+
+    public bool? IsRequired { get; set; }
+
+    public int? Priority { get; set; }
 }

@@ -40,6 +40,4 @@ public partial class Asset
     public bool? IsKpiactivated { get; set; }
 
     public virtual ICollection<CalculatedTag> CalculatedTags { get; } = new List<CalculatedTag>();
-
-    public virtual ICollection<RealRawPoint> RealRawPoints { get; } = new List<RealRawPoint>();
 }

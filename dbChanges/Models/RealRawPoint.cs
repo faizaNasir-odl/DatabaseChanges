@@ -81,5 +81,7 @@ public partial class RealRawPoint
 
     public int? ParentId { get; set; }
 
-    public virtual Asset? AssetIdFkNavigation { get; set; }
+    public int? Persistence { get; set; }
+
+    public decimal? Deadband { get; set; }
 }

@@ -65,6 +65,10 @@ public partial class CalculatedTag
 
     public string? OutputType { get; set; }
 
+    public decimal? Deadband { get; set; }
+
+    public int? Persistence { get; set; }
+
     public virtual Asset? AssetIdFkNavigation { get; set; }
 
     public virtual ICollection<ConditionalCalculation> ConditionalCalculations { get; } = new List<ConditionalCalculation>();

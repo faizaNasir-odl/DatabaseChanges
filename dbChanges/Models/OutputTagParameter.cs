@@ -24,4 +24,8 @@ public partial class OutputTagParameter
     public DateTime? UpdatedDate { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public int? Priority { get; set; }
+
+    public bool? IsRequired { get; set; }
 }
