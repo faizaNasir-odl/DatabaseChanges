@@ -14,4 +14,6 @@ public partial class ApxParameterCategory
     public string? Category { get; set; }
 
     public string? InsightType { get; set; }
+
+    public int? Priority { get; set; }
 }
