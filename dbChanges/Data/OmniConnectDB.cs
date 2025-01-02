@@ -16,6 +16,8 @@ public partial class OmniConnectDB : DbContext
     {
     }
 
+    public virtual DbSet<ApxHealthParameter> ApxHealthParameters { get; set; }
+
     public virtual DbSet<ApxParameter> ApxParameters { get; set; }
 
     public virtual DbSet<ApxParameterCategory> ApxParameterCategories { get; set; }
@@ -25,6 +27,8 @@ public partial class OmniConnectDB : DbContext
     public virtual DbSet<ApxStepsHeader> ApxStepsHeaders { get; set; }
 
     public virtual DbSet<ApxTemplateStep> ApxTemplateSteps { get; set; }
+
+    public virtual DbSet<ApxWhatIfInput> ApxWhatIfInputs { get; set; }
 
     public virtual DbSet<Asset> Assets { get; set; }
 
@@ -66,10 +70,30 @@ public partial class OmniConnectDB : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server= oc-dev-sqlserver.database.windows.net; Database= oc-dev; User Id=octopus; Password=avanceon@786;");
+        => optionsBuilder.UseSqlServer("Server= oc-modernization.database.windows.net; Database= ocm-staging; User Id=octopus; Password=avanceon@786;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ApxHealthParameter>(entity =>
+        {
+            entity.ToTable("APxHealthParameters");
+
+            entity.Property(e => e.AssetCategoryIdFk).HasColumnName("AssetCategoryIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(250);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(250);
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.Name)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.StepIdFk).HasColumnName("StepId_FK");
+            entity.Property(e => e.Unit).HasMaxLength(50);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(250);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<ApxParameter>(entity =>
         {
             entity.ToTable("APxParameters");
@@ -86,6 +110,7 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.Category).HasMaxLength(250);
             entity.Property(e => e.InsightType).HasMaxLength(250);
             entity.Property(e => e.Section).HasMaxLength(250);
+            entity.Property(e => e.StepName).HasMaxLength(250);
         });
 
         modelBuilder.Entity<ApxParameterOutputMapping>(entity =>
@@ -141,6 +166,19 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.UpdatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Updated_Date");
+        });
+
+        modelBuilder.Entity<ApxWhatIfInput>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_WhatIf_InputData");
+
+            entity.ToTable("APxWhatIf_Input");
+
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetId_Fk");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Section).HasMaxLength(100);
+            entity.Property(e => e.WhatIfInputData).HasColumnName("WhatIf_InputData");
         });
 
         modelBuilder.Entity<Asset>(entity =>
@@ -421,6 +459,9 @@ public partial class OmniConnectDB : DbContext
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
             entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.MqttPassword).HasColumnName("Mqtt_Password");
+            entity.Property(e => e.MqttPublishTopic).HasColumnName("Mqtt_Publish_Topic");
+            entity.Property(e => e.MqttUsername).HasColumnName("Mqtt_Username");
             entity.Property(e => e.SiteSpecificMappedId)
                 .HasMaxLength(100)
                 .HasColumnName("Site_Specific_Mapped_ID");

@@ -84,4 +84,8 @@ public partial class RealRawPoint
     public int? Persistence { get; set; }
 
     public decimal? Deadband { get; set; }
+
+    public bool? IsPersistenceOn { get; set; }
+
+    public bool? IsDeadbandOn { get; set; }
 }

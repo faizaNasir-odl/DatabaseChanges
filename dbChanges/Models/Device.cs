@@ -13,6 +13,12 @@ public partial class Device
 
     public string? Name { get; set; }
 
+    public string? MqttPublishTopic { get; set; }
+
+    public string? MqttUsername { get; set; }
+
+    public string? MqttPassword { get; set; }
+
     public string? CreatedBy { get; set; }
 
     public DateTime? CreatedOn { get; set; }

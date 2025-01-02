@@ -69,6 +69,10 @@ public partial class CalculatedTag
 
     public int? Persistence { get; set; }
 
+    public bool? IsPersistenceOn { get; set; }
+
+    public bool? IsDeadbandOn { get; set; }
+
     public virtual Asset? AssetIdFkNavigation { get; set; }
 
     public virtual ICollection<ConditionalCalculation> ConditionalCalculations { get; } = new List<ConditionalCalculation>();
