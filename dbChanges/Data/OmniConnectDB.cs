@@ -18,6 +18,14 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<ApxHealthParameter> ApxHealthParameters { get; set; }
 
+    public virtual DbSet<ApxHealthParameterValue> ApxHealthParameterValues { get; set; }
+
+    public virtual DbSet<ApxHealthSelection> ApxHealthSelections { get; set; }
+
+    public virtual DbSet<ApxHealthTagGroup> ApxHealthTagGroups { get; set; }
+
+    public virtual DbSet<ApxHealthTagGroupStatus> ApxHealthTagGroupStatuses { get; set; }
+
     public virtual DbSet<ApxParameter> ApxParameters { get; set; }
 
     public virtual DbSet<ApxParameterCategory> ApxParameterCategories { get; set; }
@@ -27,6 +35,8 @@ public partial class OmniConnectDB : DbContext
     public virtual DbSet<ApxStepsHeader> ApxStepsHeaders { get; set; }
 
     public virtual DbSet<ApxTemplateStep> ApxTemplateSteps { get; set; }
+
+    public virtual DbSet<ApxTwinModel> ApxTwinModels { get; set; }
 
     public virtual DbSet<ApxWhatIfInput> ApxWhatIfInputs { get; set; }
 
@@ -91,6 +101,73 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.StepIdFk).HasColumnName("StepId_FK");
             entity.Property(e => e.Unit).HasMaxLength(50);
             entity.Property(e => e.UpdatedBy).HasMaxLength(250);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxHealthParameterValue>(entity =>
+        {
+            entity.ToTable("APxHealthParameterValues");
+
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.ConstValue).HasMaxLength(200);
+            entity.Property(e => e.CreatedBy).HasMaxLength(250);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
+            entity.Property(e => e.TagDescription).HasMaxLength(250);
+            entity.Property(e => e.TagType)
+                .HasMaxLength(20)
+                .IsFixedLength();
+            entity.Property(e => e.UpdatedBy).HasMaxLength(250);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxHealthSelection>(entity =>
+        {
+            entity.ToTable("APxHealthSelection");
+
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(200);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.HasMode).HasColumnName("hasMode");
+            entity.Property(e => e.HasSpike).HasColumnName("hasSpike");
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.StepIdFk).HasColumnName("StepIdFK");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(200);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxHealthTagGroup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("APxHealthTagGroups");
+
+            entity.Property(e => e.AssetCategoryIdFk).HasColumnName("AssetCategoryIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(200);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Formula).HasMaxLength(200);
+            entity.Property(e => e.FormulaCondition).HasMaxLength(200);
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
+            entity.Property(e => e.StepIdFk).HasColumnName("StepIdFK");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(200);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxHealthTagGroupStatus>(entity =>
+        {
+            entity.ToTable("APxHealthTagGroupStatuses");
+
+            entity.Property(e => e.ApxHealthGroupIdFk).HasColumnName("APxHealthGroupIdFK");
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(200);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.UpdatedBy).HasMaxLength(200);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 
@@ -166,6 +243,19 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.UpdatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("Updated_Date");
+        });
+
+        modelBuilder.Entity<ApxTwinModel>(entity =>
+        {
+            entity.ToTable("APxTwinModel");
+
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(200);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.ResultJson).HasColumnName("ResultJSON");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(200);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<ApxWhatIfInput>(entity =>
