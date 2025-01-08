@@ -17,10 +17,8 @@ public partial class OmniConnectDB : DbContext
     }
 
     public virtual DbSet<ApxHealthParameter> ApxHealthParameters { get; set; }
-
+     
     public virtual DbSet<ApxHealthParameterValue> ApxHealthParameterValues { get; set; }
-
-    public virtual DbSet<ApxHealthSelection> ApxHealthSelections { get; set; }
 
     public virtual DbSet<ApxHealthTagGroup> ApxHealthTagGroups { get; set; }
 
@@ -123,7 +121,6 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.UpdatedBy).HasMaxLength(250);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
-
         modelBuilder.Entity<ApxHealthSelection>(entity =>
         {
             entity.ToTable("APxHealthSelection");
@@ -138,12 +135,9 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.UpdatedBy).HasMaxLength(200);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
-
         modelBuilder.Entity<ApxHealthTagGroup>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("APxHealthTagGroups");
+            entity.ToTable("APxHealthTagGroups");
 
             entity.Property(e => e.AssetCategoryIdFk).HasColumnName("AssetCategoryIdFK");
             entity.Property(e => e.CreatedBy).HasMaxLength(200);

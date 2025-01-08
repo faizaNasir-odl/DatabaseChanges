@@ -42,4 +42,6 @@ public partial class Device
     public bool? IsActive { get; set; }
 
     public bool? DeletionInProgress { get; set; }
+
+    public int? TemplateDeviceId { get; set; }
 }
