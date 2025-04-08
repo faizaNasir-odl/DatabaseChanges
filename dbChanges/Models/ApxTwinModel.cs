@@ -28,4 +28,6 @@ public partial class ApxTwinModel
     public DateTime? CreatedDate { get; set; }
 
     public int Id { get; set; }
+
+    public bool? IsModelActivating { get; set; }
 }

@@ -54,20 +54,4 @@ public partial class Device
     public bool? IsResolved { get; set; }
 
     public int? ScanInterval { get; set; }
-
-    public virtual ICollection<DeviceDlSetting> DeviceDlSettings { get; } = new List<DeviceDlSetting>();
-
-    public virtual ICollection<DeviceModbusSetting> DeviceModbusSettings { get; } = new List<DeviceModbusSetting>();
-
-    public virtual ICollection<DeviceOpcServerM2m> DeviceOpcServerM2ms { get; } = new List<DeviceOpcServerM2m>();
-
-    public virtual ICollection<DeviceTimeStampIdmapping> DeviceTimeStampIdmappings { get; } = new List<DeviceTimeStampIdmapping>();
-
-    public virtual DeviceType? DeviceTypeIdFkNavigation { get; set; }
-
-    public virtual ICollection<ModBusDeviceTagsImportStatus> ModBusDeviceTagsImportStatuses { get; } = new List<ModBusDeviceTagsImportStatus>();
-
-    public virtual ICollection<OpcSourceTagsCm> OpcSourceTagsCms { get; } = new List<OpcSourceTagsCm>();
-
-    public virtual ICollection<SourceTagImportStatus> SourceTagImportStatuses { get; } = new List<SourceTagImportStatus>();
 }

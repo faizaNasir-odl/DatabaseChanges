@@ -14,8 +14,4 @@ public partial class PipeLineTag
     public int? DataTypeIdFk { get; set; }
 
     public string? Tagslist { get; set; }
-
-    public virtual TagsDataType? DataTypeIdFkNavigation { get; set; }
-
-    public virtual ExportPipeLine? PipeLine { get; set; }
 }

@@ -88,14 +88,4 @@ public partial class RealRawPoint
     public bool? IsPersistenceOn { get; set; }
 
     public bool? IsDeadbandOn { get; set; }
-
-    public virtual ICollection<DataAlarm> DataAlarms { get; } = new List<DataAlarm>();
-
-    public virtual ICollection<DependenciesMetrix> DependenciesMetrixes { get; } = new List<DependenciesMetrix>();
-
-    public virtual ICollection<ProcessAlarm> ProcessAlarms { get; } = new List<ProcessAlarm>();
-
-    public virtual ICollection<RawTagTargetMonYear> RawTagTargetMonYears { get; } = new List<RawTagTargetMonYear>();
-
-    public virtual ICollection<RawTagTarget> RawTagTargets { get; } = new List<RawTagTarget>();
 }

@@ -30,4 +30,10 @@ public partial class ApxHealthParameter
     public int? StepIdFk { get; set; }
 
     public bool? IsRequired { get; set; }
+
+    public int? MinValue { get; set; }
+
+    public int? MaxValue { get; set; }
+
+    public string? TextType { get; set; }
 }
