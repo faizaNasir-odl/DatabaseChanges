@@ -16,6 +16,8 @@ public partial class OmniConnectDB : DbContext
     {
     }
 
+    public virtual DbSet<ApxHealthAlert> ApxHealthAlerts { get; set; }
+
     public virtual DbSet<ApxHealthParameter> ApxHealthParameters { get; set; }
 
     public virtual DbSet<ApxHealthParameterValue> ApxHealthParameterValues { get; set; }
@@ -80,6 +82,23 @@ public partial class OmniConnectDB : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ApxHealthAlert>(entity =>
+        {
+            entity.ToTable("APxHealthAlerts");
+
+            entity.Property(e => e.AlertAcknowledgedBy).HasMaxLength(50);
+            entity.Property(e => e.AlertAcknowledgedOn).HasColumnType("datetime");
+            entity.Property(e => e.AlertIgnoredBy).HasMaxLength(50);
+            entity.Property(e => e.AlertIgnoredOn).HasColumnType("datetime");
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.EventTime).HasColumnType("datetime");
+            entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<ApxHealthParameter>(entity =>
         {
             entity.ToTable("APxHealthParameters", tb =>
@@ -164,6 +183,7 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.CreatedBy).HasMaxLength(200);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.OperatingTime).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UpdatedBy).HasMaxLength(200);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
