@@ -271,10 +271,6 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<BatchJobsSchedulingDssTracking> BatchJobsSchedulingDssTrackings { get; set; }
 
-    public virtual DbSet<Buffer> Buffers { get; set; }
-
-    public virtual DbSet<BufferDssTracking> BufferDssTrackings { get; set; }
-
     public virtual DbSet<BulkDeviceReplicationLog> BulkDeviceReplicationLogs { get; set; }
 
     public virtual DbSet<BulkDeviceReplicationLogDevice> BulkDeviceReplicationLogDevices { get; set; }
@@ -969,8 +965,6 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<TankStatusLiveDssTracking> TankStatusLiveDssTrackings { get; set; }
 
-    public virtual DbSet<Task> Tasks { get; set; }
-
     public virtual DbSet<TblProduct> TblProducts { get; set; }
 
     public virtual DbSet<TblProductDssTracking> TblProductDssTrackings { get; set; }
@@ -1111,28 +1105,6 @@ public partial class OmniConnectDB : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Action>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__action__3213E83FFBC86A94");
-
-            entity.ToTable("action", "dss");
-
-            entity.HasIndex(e => new { e.State, e.Lastupdatetime }, "index_action_state_lastupdatetime");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("id");
-            entity.Property(e => e.Creationtime)
-                .HasDefaultValueSql("(getutcdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("creationtime");
-            entity.Property(e => e.Lastupdatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("lastupdatetime");
-            entity.Property(e => e.State).HasColumnName("state");
-            entity.Property(e => e.Syncgroupid).HasColumnName("syncgroupid");
-            entity.Property(e => e.Type).HasColumnName("type");
-        });
 
         modelBuilder.Entity<AdxDataType>(entity =>
         {
@@ -14930,101 +14902,6 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.UpdateScopeLocalId).HasColumnName("update_scope_local_id");
         });
 
-        modelBuilder.Entity<Task>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__task__3213E83F0F4C1EE0");
-
-            entity.ToTable("task", "dss");
-
-            entity.HasIndex(e => e.Actionid, "index_task_actionid");
-
-            entity.HasIndex(e => new { e.Agentid, e.State }, "index_task_agentid_state").HasFilter("([state]=(0))");
-
-            entity.HasIndex(e => e.Completedtime, "index_task_completedtime");
-
-            entity.HasIndex(e => new { e.State, e.Agentid, e.DependencyCount, e.Priority, e.Creationtime }, "index_task_gettask");
-
-            entity.HasIndex(e => new { e.State, e.Completedtime }, "index_task_state").HasFilter("([state]=(2))");
-
-            entity.HasIndex(e => new { e.Lastheartbeat, e.State }, "index_task_state_lastheartbeat").HasFilter("([state]<(0))");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("(newid())")
-                .HasColumnName("id");
-            entity.Property(e => e.Actionid).HasColumnName("actionid");
-            entity.Property(e => e.Agentid).HasColumnName("agentid");
-            entity.Property(e => e.Completedtime)
-                .HasColumnType("datetime")
-                .HasColumnName("completedtime");
-            entity.Property(e => e.Creationtime)
-                .HasDefaultValueSql("(getutcdate())")
-                .HasColumnType("datetime")
-                .HasColumnName("creationtime");
-            entity.Property(e => e.DependencyCount).HasColumnName("dependency_count");
-            entity.Property(e => e.Lastheartbeat)
-                .HasColumnType("datetime")
-                .HasColumnName("lastheartbeat");
-            entity.Property(e => e.Lastresettime)
-                .HasColumnType("datetime")
-                .HasColumnName("lastresettime");
-            entity.Property(e => e.OwningInstanceid).HasColumnName("owning_instanceid");
-            entity.Property(e => e.Pickuptime)
-                .HasColumnType("datetime")
-                .HasColumnName("pickuptime");
-            entity.Property(e => e.Priority)
-                .HasDefaultValueSql("((100))")
-                .HasColumnName("priority");
-            entity.Property(e => e.Request).HasColumnName("request");
-            entity.Property(e => e.Response).HasColumnName("response");
-            entity.Property(e => e.RetryCount).HasColumnName("retry_count");
-            entity.Property(e => e.State)
-                .HasDefaultValueSql("((0))")
-                .HasColumnName("state");
-            entity.Property(e => e.TaskNumber)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("taskNumber");
-            entity.Property(e => e.Type).HasColumnName("type");
-            entity.Property(e => e.Version).HasColumnName("version");
-
-            entity.HasOne(d => d.Action).WithMany(p => p.Tasks)
-                .HasForeignKey(d => d.Actionid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__task__actionid");
-
-            entity.HasMany(d => d.Nexttasks).WithMany(p => p.Prevtasks)
-                .UsingEntity<Dictionary<string, object>>(
-                    "Taskdependency",
-                    r => r.HasOne<Task>().WithMany()
-                        .HasForeignKey("Nexttaskid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__taskdepen__nextt"),
-                    l => l.HasOne<Task>().WithMany()
-                        .HasForeignKey("Prevtaskid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__taskdepen__prevt"),
-                    j =>
-                    {
-                        j.HasKey("Nexttaskid", "Prevtaskid").HasName("PK_TaskTask");
-                        j.ToTable("taskdependency", "dss");
-                    });
-
-            entity.HasMany(d => d.Prevtasks).WithMany(p => p.Nexttasks)
-                .UsingEntity<Dictionary<string, object>>(
-                    "Taskdependency",
-                    r => r.HasOne<Task>().WithMany()
-                        .HasForeignKey("Prevtaskid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__taskdepen__prevt"),
-                    l => l.HasOne<Task>().WithMany()
-                        .HasForeignKey("Nexttaskid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__taskdepen__nextt"),
-                    j =>
-                    {
-                        j.HasKey("Nexttaskid", "Prevtaskid").HasName("PK_TaskTask");
-                        j.ToTable("taskdependency", "dss");
-                    });
-        });
 
         modelBuilder.Entity<TblProduct>(entity =>
         {
