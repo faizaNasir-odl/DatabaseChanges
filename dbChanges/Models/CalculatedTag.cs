@@ -75,5 +75,15 @@ public partial class CalculatedTag
 
     public virtual Asset? AssetIdFkNavigation { get; set; }
 
+    public virtual ICollection<CalculatedTagTargetMonYear> CalculatedTagTargetMonYears { get; } = new List<CalculatedTagTargetMonYear>();
+
+    public virtual ICollection<CalculatedTagTarget> CalculatedTagTargets { get; } = new List<CalculatedTagTarget>();
+
     public virtual ICollection<ConditionalCalculation> ConditionalCalculations { get; } = new List<ConditionalCalculation>();
+
+    public virtual ICollection<DataAlarm> DataAlarms { get; } = new List<DataAlarm>();
+
+    public virtual ICollection<DependenciesMetrix> DependenciesMetrixes { get; } = new List<DependenciesMetrix>();
+
+    public virtual ICollection<ProcessAlarm> ProcessAlarms { get; } = new List<ProcessAlarm>();
 }

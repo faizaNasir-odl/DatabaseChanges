@@ -39,6 +39,8 @@ public partial class DataAlarm
 
     public virtual CalculatedTag? CTag { get; set; }
 
+    public virtual ICollection<DataAlarmAction1> DataAlarmAction1s { get; } = new List<DataAlarmAction1>();
+
     public virtual ICollection<DataAlarmAction> DataAlarmActions { get; } = new List<DataAlarmAction>();
 
     public virtual ICollection<DataAlarmStatesConfig> DataAlarmStatesConfigs { get; } = new List<DataAlarmStatesConfig>();

@@ -30,4 +30,6 @@ public partial class AnomalyDetectionGroup
     public bool? IsRunning { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public int? ModelTrainingType { get; set; }
 }

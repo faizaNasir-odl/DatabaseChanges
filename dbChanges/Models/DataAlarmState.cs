@@ -19,5 +19,7 @@ public partial class DataAlarmState
 
     public DateTime? UpdatedDate { get; set; }
 
+    public virtual ICollection<DataAlarmAction> DataAlarmActions { get; } = new List<DataAlarmAction>();
+
     public virtual ICollection<DataAlarmStatesConfig> DataAlarmStatesConfigs { get; } = new List<DataAlarmStatesConfig>();
 }

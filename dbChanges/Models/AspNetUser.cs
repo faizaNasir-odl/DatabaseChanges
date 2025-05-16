@@ -85,6 +85,8 @@ public partial class AspNetUser
 
     public virtual Customer? CustomerIdFkNavigation { get; set; }
 
+    public virtual ICollection<DataAlarmAction> DataAlarmActions { get; } = new List<DataAlarmAction>();
+
     public virtual ICollection<ExportSiteLayOutStatus> ExportSiteLayOutStatuses { get; } = new List<ExportSiteLayOutStatus>();
 
     public virtual ICollection<SystemAlarmAction> SystemAlarmActions { get; } = new List<SystemAlarmAction>();

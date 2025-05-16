@@ -49,5 +49,17 @@ public partial class Asset
 
     public string? ApxPerformanceStatus { get; set; }
 
+    public virtual ICollection<AssetAssetAreaMToM> AssetAssetAreaMToMs { get; } = new List<AssetAssetAreaMToM>();
+
+    public virtual ICollection<AssetProperty> AssetProperties { get; } = new List<AssetProperty>();
+
     public virtual ICollection<CalculatedTag> CalculatedTags { get; } = new List<CalculatedTag>();
+
+    public virtual ICollection<ManualFixPoint> ManualFixPoints { get; } = new List<ManualFixPoint>();
+
+    public virtual ICollection<TblTankStatus> TblTankStatuses { get; } = new List<TblTankStatus>();
+
+    public virtual ICollection<TblTransaction> TblTransactions { get; } = new List<TblTransaction>();
+
+    public virtual ICollection<WhatIfResult> WhatIfResults { get; } = new List<WhatIfResult>();
 }

@@ -15,5 +15,7 @@ public partial class Event
 
     public bool? IsRequired { get; set; }
 
+    public virtual EventComponent? Ecomponent { get; set; }
+
     public virtual ICollection<SiteEventsM2m> SiteEventsM2ms { get; } = new List<SiteEventsM2m>();
 }

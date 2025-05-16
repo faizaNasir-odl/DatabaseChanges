@@ -38,4 +38,24 @@ public partial class AnomalyDetectionTagResult
     public double? Rmse { get; set; }
 
     public double? R2 { get; set; }
+
+    public double? R2Score100 { get; set; }
+
+    public double? Rsq100 { get; set; }
+
+    public double? Mae100 { get; set; }
+
+    public double? ExplainedVariance100 { get; set; }
+
+    public double? StabilityScore { get; set; }
+
+    public bool? NbCheck { get; set; }
+
+    public bool? RampCheck { get; set; }
+
+    public double? RampPercentage { get; set; }
+
+    public double? StdError { get; set; }
+
+    public string? Predictors { get; set; }
 }

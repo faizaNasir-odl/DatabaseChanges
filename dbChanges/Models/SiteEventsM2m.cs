@@ -27,5 +27,9 @@ public partial class SiteEventsM2m
 
     public bool? IsRequired { get; set; }
 
+    public virtual AlarmPriority? AlarmPriority { get; set; }
+
     public virtual Event? Event { get; set; }
+
+    public virtual ICollection<SystemAlarmAction> SystemAlarmActions { get; } = new List<SystemAlarmAction>();
 }

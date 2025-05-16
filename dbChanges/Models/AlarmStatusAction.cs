@@ -9,5 +9,7 @@ public partial class AlarmStatusAction
 
     public string? AsTitle { get; set; }
 
+    public virtual ICollection<DataAlarmAction> DataAlarmActions { get; } = new List<DataAlarmAction>();
+
     public virtual ICollection<SystemAlarmAction> SystemAlarmActions { get; } = new List<SystemAlarmAction>();
 }
