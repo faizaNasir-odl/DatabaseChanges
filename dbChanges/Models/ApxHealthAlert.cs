@@ -38,4 +38,6 @@ public partial class ApxHealthAlert
     public string? UpdatedBy { get; set; }
 
     public int? NotificationCount { get; set; }
+
+    public DateTime? LastNotifiedOn { get; set; }
 }
