@@ -22,4 +22,10 @@ public partial class ApxHealthTagGroupStatus
     public string? CreatedBy { get; set; }
 
     public DateTime? CreatedDate { get; set; }
+
+    public bool? IsOperating { get; set; }
+
+    public DateTime? OperatingTime { get; set; }
+
+    public string? TagJsondata { get; set; }
 }

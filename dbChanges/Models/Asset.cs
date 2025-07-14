@@ -39,5 +39,15 @@ public partial class Asset
 
     public bool? IsKpiactivated { get; set; }
 
+    public bool? IsApxHealthActivated { get; set; }
+
+    public bool? IsApxHealthActivating { get; set; }
+
+    public bool? IsKpiactivating { get; set; }
+
+    public string? ApxHealthStatus { get; set; }
+
+    public string? ApxPerformanceStatus { get; set; }
+
     public virtual ICollection<CalculatedTag> CalculatedTags { get; } = new List<CalculatedTag>();
 }

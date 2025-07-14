@@ -44,4 +44,14 @@ public partial class Device
     public bool? DeletionInProgress { get; set; }
 
     public int? TemplateDeviceId { get; set; }
+
+    public int? FormatIdfk { get; set; }
+
+    public string? JiraTicketUrl { get; set; }
+
+    public DateTime? TicketIssuedOn { get; set; }
+
+    public bool? IsResolved { get; set; }
+
+    public int? ScanInterval { get; set; }
 }

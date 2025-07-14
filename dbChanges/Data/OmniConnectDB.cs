@@ -16,13 +16,19 @@ public partial class OmniConnectDB : DbContext
     {
     }
 
+    public virtual DbSet<ApxHealthAlert> ApxHealthAlerts { get; set; }
+
+    public virtual DbSet<ApxHealthAlertTrend> ApxHealthAlertTrends { get; set; }
+
     public virtual DbSet<ApxHealthParameter> ApxHealthParameters { get; set; }
-     
+
     public virtual DbSet<ApxHealthParameterValue> ApxHealthParameterValues { get; set; }
 
     public virtual DbSet<ApxHealthTagGroup> ApxHealthTagGroups { get; set; }
 
     public virtual DbSet<ApxHealthTagGroupStatus> ApxHealthTagGroupStatuses { get; set; }
+
+    public virtual DbSet<ApxInsightTab> ApxInsightTabs { get; set; }
 
     public virtual DbSet<ApxParameter> ApxParameters { get; set; }
 
@@ -58,6 +64,8 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<Device> Devices { get; set; }
 
+    public virtual DbSet<Event> Events { get; set; }
+
     public virtual DbSet<KpieIpTagsDatum> KpieIpTagsData { get; set; }
 
     public virtual DbSet<KpieIpTagsParameter> KpieIpTagsParameters { get; set; }
@@ -74,14 +82,47 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<RealRawPoint> RealRawPoints { get; set; }
 
-    public virtual DbSet<TriggeredDataAlarmAction> TriggeredDataAlarmActions { get; set; }
+    public virtual DbSet<SiteEventsM2m> SiteEventsM2ms { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server= oc-modernization.database.windows.net; Database= ocm-staging; User Id=octopus; Password=avanceon@786;");
+        => optionsBuilder.UseSqlServer("Server=oc-modernization-blue.database.windows.net; Database= ocm-staging; User Id=octopus; Password=avanceon@786;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ApxHealthAlert>(entity =>
+        {
+            entity.ToTable("APxHealthAlerts");
+
+            entity.Property(e => e.AlertAcknowledgedBy).HasMaxLength(50);
+            entity.Property(e => e.AlertAcknowledgedOn).HasColumnType("datetime");
+            entity.Property(e => e.AlertIgnoredBy).HasMaxLength(50);
+            entity.Property(e => e.AlertIgnoredOn).HasColumnType("datetime");
+            entity.Property(e => e.AnomalyEndOn).HasColumnType("datetime");
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.EventTime).HasColumnType("datetime");
+            entity.Property(e => e.LastNotifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
+            entity.Property(e => e.UpdatedBy).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxHealthAlertTrend>(entity =>
+        {
+            entity.ToTable("APxHealthAlertTrends");
+
+            entity.HasIndex(e => new { e.AssetIdFk, e.ParameterIdFk }, "IX_APxHealthAlertTrends_Composite");
+
+            entity.HasIndex(e => e.CreatedDate, "IX_APxHealthAlertTrends_CreatedDate").IsDescending();
+
+            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Jsondata).HasColumnName("JSONData");
+            entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
+        });
+
         modelBuilder.Entity<ApxHealthParameter>(entity =>
         {
             entity.ToTable("APxHealthParameters");
@@ -97,6 +138,7 @@ public partial class OmniConnectDB : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.StepIdFk).HasColumnName("StepId_FK");
+            entity.Property(e => e.TextType).HasMaxLength(50);
             entity.Property(e => e.Unit).HasMaxLength(50);
             entity.Property(e => e.UpdatedBy).HasMaxLength(250);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
@@ -115,26 +157,11 @@ public partial class OmniConnectDB : DbContext
                 .HasDefaultValueSql("((1))");
             entity.Property(e => e.ParameterIdFk).HasColumnName("ParameterIdFK");
             entity.Property(e => e.TagDescription).HasMaxLength(250);
-            entity.Property(e => e.TagType)
-                .HasMaxLength(20)
-                .IsFixedLength();
+            entity.Property(e => e.TagType).HasMaxLength(50);
             entity.Property(e => e.UpdatedBy).HasMaxLength(250);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
-        modelBuilder.Entity<ApxHealthSelection>(entity =>
-        {
-            entity.ToTable("APxHealthSelection");
 
-            entity.Property(e => e.AssetIdFk).HasColumnName("AssetIdFK");
-            entity.Property(e => e.CreatedBy).HasMaxLength(200);
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.HasMode).HasColumnName("hasMode");
-            entity.Property(e => e.HasSpike).HasColumnName("hasSpike");
-            entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
-            entity.Property(e => e.StepIdFk).HasColumnName("StepIdFK");
-            entity.Property(e => e.UpdatedBy).HasMaxLength(200);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
         modelBuilder.Entity<ApxHealthTagGroup>(entity =>
         {
             entity.ToTable("APxHealthTagGroups");
@@ -160,9 +187,19 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.CreatedBy).HasMaxLength(200);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.OperatingTime).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.TagJsondata).HasColumnName("TagJSONData");
             entity.Property(e => e.UpdatedBy).HasMaxLength(200);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ApxInsightTab>(entity =>
+        {
+            entity.ToTable("APxInsightTabs");
+
+            entity.Property(e => e.AssetCategoryIdFk).HasColumnName("AssetCategoryId_FK");
+            entity.Property(e => e.TabName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<ApxParameter>(entity =>
@@ -247,6 +284,7 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.CreatedBy).HasMaxLength(200);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+            entity.Property(e => e.IsModelActivating).HasDefaultValueSql("((0))");
             entity.Property(e => e.ResultJson).HasColumnName("ResultJSON");
             entity.Property(e => e.UpdatedBy).HasMaxLength(200);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
@@ -268,6 +306,14 @@ public partial class OmniConnectDB : DbContext
         modelBuilder.Entity<Asset>(entity =>
         {
             entity.Property(e => e.AssetId).HasColumnName("Asset_Id");
+            entity.Property(e => e.ApxHealthStatus)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("APxHealthStatus");
+            entity.Property(e => e.ApxPerformanceStatus)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("APxPerformanceStatus");
             entity.Property(e => e.AssetCategory).HasMaxLength(200);
             entity.Property(e => e.AssetName)
                 .HasMaxLength(250)
@@ -285,9 +331,18 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.IsActive)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
+            entity.Property(e => e.IsApxHealthActivated)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("IsAPxHealthActivated");
+            entity.Property(e => e.IsApxHealthActivating)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("IsAPxHealthActivating");
             entity.Property(e => e.IsKpiactivated)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("IsKPIActivated");
+            entity.Property(e => e.IsKpiactivating)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("IsKPIActivating");
             entity.Property(e => e.LastServiceBy)
                 .HasMaxLength(250)
                 .HasColumnName("Last_Service_By");
@@ -462,6 +517,7 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.AstId).HasColumnName("AST_ID");
             entity.Property(e => e.ActionEndDate).HasColumnType("datetime");
             entity.Property(e => e.ActionStartDate).HasColumnType("datetime");
+            entity.Property(e => e.AlarmDuration).HasDefaultValueSql("((24))");
             entity.Property(e => e.AlarmPriorityId).HasColumnName("AlarmPriority_ID");
             entity.Property(e => e.AlarmProcessed)
                 .HasDefaultValueSql("((0))")
@@ -536,12 +592,17 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DevicePlatform).HasColumnName("Device_Platform");
             entity.Property(e => e.DeviceTypeIdFk).HasColumnName("DeviceTypeID_Fk");
+            entity.Property(e => e.FormatIdfk).HasColumnName("FormatIDFk");
             entity.Property(e => e.Guid).HasColumnName("GUID");
             entity.Property(e => e.IoTedgeConnectionString).HasColumnName("IoTEdge_ConnectionString");
             entity.Property(e => e.IotconnectionString).HasColumnName("IOTConnectionString");
             entity.Property(e => e.IsActive)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
+            entity.Property(e => e.JiraTicketUrl)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("JiraTicketURL");
             entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
             entity.Property(e => e.MqttPassword).HasColumnName("Mqtt_Password");
             entity.Property(e => e.MqttPublishTopic).HasColumnName("Mqtt_Publish_Topic");
@@ -549,6 +610,16 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.SiteSpecificMappedId)
                 .HasMaxLength(100)
                 .HasColumnName("Site_Specific_Mapped_ID");
+            entity.Property(e => e.TicketIssuedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Event>(entity =>
+        {
+            entity.HasKey(e => e.EventId).HasName("PK__Events__FD6BEF84E1E5AC2B");
+
+            entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            entity.Property(e => e.EcomponentId).HasColumnName("EComponent_ID");
+            entity.Property(e => e.EventName).HasMaxLength(200);
         });
 
         modelBuilder.Entity<KpieIpTagsDatum>(entity =>
@@ -732,32 +803,28 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.Variation).HasColumnName("VARIATION");
         });
 
-        modelBuilder.Entity<TriggeredDataAlarmAction>(entity =>
+        modelBuilder.Entity<SiteEventsM2m>(entity =>
         {
-            entity.HasKey(e => e.DatId).HasName("TRIGGERED_PK__DATA_ALA__5D853E1A0C706C36");
+            entity.HasKey(e => e.SiteEventId);
 
-            entity.ToTable("TRIGGERED_DATA_ALARM_ACTION", tb => tb.HasTrigger("InsertTriggeredAlarmDataUsingStoredProc"));
+            entity.ToTable("SITE_Events_M2M");
 
-            entity.Property(e => e.DatId).HasColumnName("DAT_ID");
+            entity.Property(e => e.SiteEventId).HasColumnName("SiteEventID");
             entity.Property(e => e.ActionEndDate).HasColumnType("datetime");
-            entity.Property(e => e.ActionPerformedBy).HasMaxLength(128);
             entity.Property(e => e.ActionStartDate).HasColumnType("datetime");
+            entity.Property(e => e.AlarmPriorityId).HasColumnName("AlarmPriority_ID");
             entity.Property(e => e.AsId).HasColumnName("AS_Id");
-            entity.Property(e => e.AstId).HasColumnName("AST_ID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.CurrentValue)
-                .HasMaxLength(100)
-                .HasColumnName("Current_Value");
-            entity.Property(e => e.DataAlarmActionGuid)
-                .HasMaxLength(128)
-                .HasColumnName("DataAlarmActionGUID");
-            entity.Property(e => e.DataAlarmId).HasColumnName("DataAlarm_ID");
-            entity.Property(e => e.IsActive).HasColumnName("isActive");
-            entity.Property(e => e.ReadingTime)
-                .HasColumnType("datetime")
-                .HasColumnName("Reading_Time");
-            entity.Property(e => e.SetPoint).HasMaxLength(100);
-            entity.Property(e => e.StateId).HasColumnName("State_ID");
+            entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            entity.Property(e => e.IsAlarmActive).HasColumnName("isAlarmActive");
+            entity.Property(e => e.ModifiedBy)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.SiteId).HasColumnName("Site_ID");
+
+            entity.HasOne(d => d.Event).WithMany(p => p.SiteEventsM2ms)
+                .HasForeignKey(d => d.EventId)
+                .HasConstraintName("FK_SITE_Events_M2M.Event_Id");
         });
 
         OnModelCreatingPartial(modelBuilder);

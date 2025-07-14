@@ -42,4 +42,6 @@ public partial class DataAlarmStatesConfig
     public bool? IsCurrentStateActive { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public int? AlarmDuration { get; set; }
 }
