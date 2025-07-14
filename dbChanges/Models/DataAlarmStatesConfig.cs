@@ -42,4 +42,14 @@ public partial class DataAlarmStatesConfig
     public bool? IsCurrentStateActive { get; set; }
 
     public bool? IsActive { get; set; }
+
+    public int? AlarmDuration { get; set; }
+
+    public virtual AlarmPriority? AlarmPriority { get; set; }
+
+    public virtual DataAlarm? DataAlarm { get; set; }
+
+    public virtual ICollection<DataAlarmAction> DataAlarmActions { get; } = new List<DataAlarmAction>();
+
+    public virtual DataAlarmState? State { get; set; }
 }
