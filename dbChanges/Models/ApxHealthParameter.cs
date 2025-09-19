@@ -15,7 +15,7 @@ public partial class ApxHealthParameter
 
     public string? Unit { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public string? CreatedBy { get; set; }
 
@@ -30,4 +30,10 @@ public partial class ApxHealthParameter
     public int? StepIdFk { get; set; }
 
     public bool? IsRequired { get; set; }
+
+    public int? MinValue { get; set; }
+
+    public int? MaxValue { get; set; }
+
+    public string? TextType { get; set; }
 }

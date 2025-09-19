@@ -39,9 +39,41 @@ public partial class Device
 
     public DateTime? CertificationExpirationDate { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public bool? DeletionInProgress { get; set; }
 
     public int? TemplateDeviceId { get; set; }
+
+    public int? FormatIdfk { get; set; }
+
+    public string? JiraTicketUrl { get; set; }
+
+    public DateTime? TicketIssuedOn { get; set; }
+
+    public bool? IsResolved { get; set; }
+
+    public int? ScanInterval { get; set; }
+
+    public bool? IsEmailActivated { get; set; }
+
+    public string? GroupIds { get; set; }
+
+    public virtual ICollection<DeviceDlSetting> DeviceDlSettings { get; set; } = new List<DeviceDlSetting>();
+
+    public virtual ICollection<DeviceModbusSetting> DeviceModbusSettings { get; set; } = new List<DeviceModbusSetting>();
+
+    public virtual ICollection<DeviceOpcServerM2m> DeviceOpcServerM2ms { get; set; } = new List<DeviceOpcServerM2m>();
+
+    public virtual ICollection<DeviceTimeStampIdmapping> DeviceTimeStampIdmappings { get; set; } = new List<DeviceTimeStampIdmapping>();
+
+    public virtual DeviceType? DeviceTypeIdFkNavigation { get; set; }
+
+    public virtual ICollection<ModBusDeviceTagsImportStatus> ModBusDeviceTagsImportStatuses { get; set; } = new List<ModBusDeviceTagsImportStatus>();
+
+    public virtual ICollection<OpcSourceTagsCm> OpcSourceTagsCms { get; set; } = new List<OpcSourceTagsCm>();
+
+    public virtual ICollection<SourceTagImportStatus> SourceTagImportStatuses { get; set; } = new List<SourceTagImportStatus>();
+
+    public virtual ICollection<TagLakeLastUpdate> TagLakeLastUpdates { get; set; } = new List<TagLakeLastUpdate>();
 }

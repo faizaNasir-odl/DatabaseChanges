@@ -75,7 +75,7 @@ public partial class RealRawPoint
 
     public int? DataTypeIdFk { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public bool? IsGps { get; set; }
 
@@ -88,4 +88,16 @@ public partial class RealRawPoint
     public bool? IsPersistenceOn { get; set; }
 
     public bool? IsDeadbandOn { get; set; }
+
+    public virtual ICollection<DataAlarm> DataAlarms { get; set; } = new List<DataAlarm>();
+
+    public virtual ICollection<DependenciesMetrix> DependenciesMetrixes { get; set; } = new List<DependenciesMetrix>();
+
+    public virtual ICollection<ProcessAlarm> ProcessAlarms { get; set; } = new List<ProcessAlarm>();
+
+    public virtual ICollection<RawTagTargetMonYear> RawTagTargetMonYears { get; set; } = new List<RawTagTargetMonYear>();
+
+    public virtual ICollection<RawTagTarget> RawTagTargets { get; set; } = new List<RawTagTarget>();
+
+    public virtual ICollection<TagGapAlarmsLog> TagGapAlarmsLogs { get; set; } = new List<TagGapAlarmsLog>();
 }

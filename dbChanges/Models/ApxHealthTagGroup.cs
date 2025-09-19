@@ -5,6 +5,8 @@ namespace dbChanges.Models;
 
 public partial class ApxHealthTagGroup
 {
+    public int Id { get; set; }
+
     public int? AssetCategoryIdFk { get; set; }
 
     public string? GroupIds { get; set; }
@@ -28,6 +30,4 @@ public partial class ApxHealthTagGroup
     public string? CreatedBy { get; set; }
 
     public DateTime? CreatedDate { get; set; }
-
-    public int Id { get; set; }
 }

@@ -25,7 +25,7 @@ public partial class ApxTemplateStep
 
     public DateTime? CreatedDate { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public bool? IsOutputMapping { get; set; }
 }

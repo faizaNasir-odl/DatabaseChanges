@@ -9,9 +9,15 @@ public partial class PipeLineTag
 
     public int? PipeLineId { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public int? DataTypeIdFk { get; set; }
 
     public string? Tagslist { get; set; }
+
+    public string? TimestampColumn { get; set; }
+
+    public virtual TagsDataType? DataTypeIdFkNavigation { get; set; }
+
+    public virtual ExportPipeLine? PipeLine { get; set; }
 }

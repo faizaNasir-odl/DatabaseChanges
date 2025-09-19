@@ -35,9 +35,31 @@ public partial class Asset
 
     public string? AssetCategory { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public bool? IsKpiactivated { get; set; }
 
-    public virtual ICollection<CalculatedTag> CalculatedTags { get; } = new List<CalculatedTag>();
+    public bool? IsApxHealthActivated { get; set; }
+
+    public bool? IsApxHealthActivating { get; set; }
+
+    public bool? IsKpiactivating { get; set; }
+
+    public string? ApxHealthStatus { get; set; }
+
+    public string? ApxPerformanceStatus { get; set; }
+
+    public virtual ICollection<AssetAssetAreaMToM> AssetAssetAreaMToMs { get; set; } = new List<AssetAssetAreaMToM>();
+
+    public virtual ICollection<AssetProperty> AssetProperties { get; set; } = new List<AssetProperty>();
+
+    public virtual ICollection<CalculatedTag> CalculatedTags { get; set; } = new List<CalculatedTag>();
+
+    public virtual ICollection<ManualFixPoint> ManualFixPoints { get; set; } = new List<ManualFixPoint>();
+
+    public virtual ICollection<TblTankStatus> TblTankStatuses { get; set; } = new List<TblTankStatus>();
+
+    public virtual ICollection<TblTransaction> TblTransactions { get; set; } = new List<TblTransaction>();
+
+    public virtual ICollection<WhatIfResult> WhatIfResults { get; set; } = new List<WhatIfResult>();
 }

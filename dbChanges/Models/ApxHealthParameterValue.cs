@@ -29,7 +29,7 @@ public partial class ApxHealthParameterValue
 
     public DateTime? CreatedDate { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public int Id { get; set; }
 }
