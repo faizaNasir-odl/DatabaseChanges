@@ -34,4 +34,8 @@ public partial class AnomalyDetectionGroup
     public int? ModelTrainingType { get; set; }
 
     public bool? IsModelCreated { get; set; }
+
+    public int StabilityPeriod { get; set; }
+
+    public int RelaxationFactor { get; set; }
 }

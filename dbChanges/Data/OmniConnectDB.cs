@@ -80,6 +80,8 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<AnomalyDetectionMatrixTable> AnomalyDetectionMatrixTables { get; set; }
 
+    public virtual DbSet<AnomalyDetectionRelaxationFactorMap> AnomalyDetectionRelaxationFactorMaps { get; set; }
+
     public virtual DbSet<AnomalyDetectionTag> AnomalyDetectionTags { get; set; }
 
     public virtual DbSet<AnomalyDetectionTagGroup> AnomalyDetectionTagGroups { get; set; }
@@ -726,6 +728,8 @@ public partial class OmniConnectDB : DbContext
     public virtual DbSet<TblTransaction> TblTransactions { get; set; }
 
     public virtual DbSet<TestApi> TestApis { get; set; }
+
+    public virtual DbSet<TestScanRateTable> TestScanRateTables { get; set; }
 
     public virtual DbSet<TestingTankStatus> TestingTankStatuses { get; set; }
 
@@ -1407,6 +1411,12 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.GroupName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.RelaxationFactor)
+                .HasDefaultValue(1)
+                .HasColumnName("Relaxation_Factor");
+            entity.Property(e => e.StabilityPeriod)
+                .HasDefaultValue(60)
+                .HasColumnName("Stability_Period");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -1448,6 +1458,16 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.ModelledTagType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<AnomalyDetectionRelaxationFactorMap>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("AnomalyDetectionRelaxationFactorMap");
+
+            entity.Property(e => e.RelaxationFactor).HasColumnName("Relaxation_Factor");
+            entity.Property(e => e.SigmaValue).HasColumnName("Sigma_Value");
         });
 
         modelBuilder.Entity<AnomalyDetectionTag>(entity =>
@@ -3079,7 +3099,6 @@ public partial class OmniConnectDB : DbContext
                 .HasConstraintName("FK_BPMJobsScheduling_BatchJobTriggerTypes");
         });
 
-
         modelBuilder.Entity<BulkDeviceReplicationLog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__BulkDevi__3214EC07614705EF");
@@ -4593,10 +4612,7 @@ public partial class OmniConnectDB : DbContext
 
             entity.ToTable("Enp_Connector_RestApi");
 
-            entity.Property(e => e.ClientId).HasMaxLength(250);
             entity.Property(e => e.ConnectIdFk).HasColumnName("ConnectIdFK");
-            entity.Property(e => e.RestAuthPassword).HasMaxLength(250);
-            entity.Property(e => e.RestAuthUsername).HasMaxLength(250);
         });
 
         modelBuilder.Entity<EnpConnectorSqlAutomation>(entity =>
@@ -8106,6 +8122,31 @@ public partial class OmniConnectDB : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("site_name");
+        });
+
+        modelBuilder.Entity<TestScanRateTable>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__test_sca__3214EC07C8765A5D");
+
+            entity.ToTable("test_scan_rate_table");
+
+            entity.Property(e => e.AdxId).HasColumnName("ADX_Id");
+            entity.Property(e => e.DeviceTypeIdFk).HasColumnName("DeviceTypeID_Fk");
+            entity.Property(e => e.HeartBeatRate).HasColumnName("Heart_Beat_Rate");
+            entity.Property(e => e.IsGps).HasColumnName("IsGPS");
+            entity.Property(e => e.IsTTotalizer).HasColumnName("Is_T_Totalizer");
+            entity.Property(e => e.PublishRate).HasColumnName("Publish_Rate");
+            entity.Property(e => e.RMappedByDevice).HasColumnName("R_Mapped_By_Device");
+            entity.Property(e => e.RMappedName).HasColumnName("R_Mapped_Name");
+            entity.Property(e => e.RTagName).HasColumnName("R_Tag_Name");
+            entity.Property(e => e.RealTagId).HasColumnName("Real_Tag_Id");
+            entity.Property(e => e.ScanInterval).HasColumnName("Scan_Interval");
+            entity.Property(e => e.ScanRate).HasColumnName("Scan_Rate");
+            entity.Property(e => e.SiteIdFk).HasColumnName("site_id_fk");
+            entity.Property(e => e.SiteSpecificDeviceId).HasColumnName("Site_Specific_Device_Id");
+            entity.Property(e => e.SourceTagId).HasColumnName("Source_Tag_Id");
+            entity.Property(e => e.SourceTagName).HasColumnName("Source_Tag_Name");
+            entity.Property(e => e.TotalizerRefrenceId).HasColumnName("Totalizer_Refrence_Id");
         });
 
         modelBuilder.Entity<TestingTankStatus>(entity =>

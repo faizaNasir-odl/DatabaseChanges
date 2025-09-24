@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dbChanges.Models;
 
-public partial class EnpConnectorRestApi
+public partial class ConnectorRestApi
 {
     public int Id { get; set; }
 
@@ -15,23 +15,17 @@ public partial class EnpConnectorRestApi
 
     public int? RestAuthType { get; set; }
 
-    public string? RestAuthHeaders { get; set; }
+    public string? RestAuthUsername { get; set; }
 
-    public string? RestAuthBody { get; set; }
+    public string? RestAuthPassword { get; set; }
 
-    public string? TokenAuthHeaders { get; set; }
+    public string? ClientId { get; set; }
 
-    public string? TokenAuthBody { get; set; }
+    public string? ClientSecret { get; set; }
 
     public int? TokenType { get; set; }
 
     public int? TokenMethod { get; set; }
 
     public string? TokenEndPoint { get; set; }
-
-    public string? TokenPath { get; set; }
-
-    public string? StartTimePath { get; set; }
-
-    public string? EndTimePath { get; set; }
 }
