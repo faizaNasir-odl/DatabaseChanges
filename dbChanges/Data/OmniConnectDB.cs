@@ -260,10 +260,11 @@ public partial class OmniConnectDB : DbContext
 
     public virtual DbSet<BpmjobsScheduling> BpmjobsSchedulings { get; set; }
 
-
     public virtual DbSet<BulkDeviceReplicationLog> BulkDeviceReplicationLogs { get; set; }
 
     public virtual DbSet<BulkDeviceReplicationLogDevice> BulkDeviceReplicationLogDevices { get; set; }
+
+    public virtual DbSet<CalTestScanRateTable> CalTestScanRateTables { get; set; }
 
     public virtual DbSet<CalculatedTag> CalculatedTags { get; set; }
 
@@ -1585,6 +1586,9 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.ClientId).HasMaxLength(200);
             entity.Property(e => e.ClientSecret).HasMaxLength(500);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.EndPath)
+                .HasMaxLength(200)
+                .HasColumnName("End_path");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.JsonPath).HasMaxLength(500);
             entity.Property(e => e.Password).HasMaxLength(200);
@@ -1597,6 +1601,9 @@ public partial class OmniConnectDB : DbContext
             entity.Property(e => e.Scope).HasMaxLength(500);
             entity.Property(e => e.SiteId).HasMaxLength(200);
             entity.Property(e => e.SiteName).HasMaxLength(200);
+            entity.Property(e => e.StartPath)
+                .HasMaxLength(200)
+                .HasColumnName("Start_path");
             entity.Property(e => e.TenantId).HasMaxLength(200);
             entity.Property(e => e.TokenEndpoint).HasMaxLength(500);
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(getutcdate())");
@@ -3099,6 +3106,7 @@ public partial class OmniConnectDB : DbContext
                 .HasConstraintName("FK_BPMJobsScheduling_BatchJobTriggerTypes");
         });
 
+       
         modelBuilder.Entity<BulkDeviceReplicationLog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__BulkDevi__3214EC07614705EF");
@@ -3127,6 +3135,28 @@ public partial class OmniConnectDB : DbContext
             entity.HasOne(d => d.Log).WithMany(p => p.BulkDeviceReplicationLogDevices)
                 .HasForeignKey(d => d.LogId)
                 .HasConstraintName("FK_BulkDeviceReplicationLogDevices_BulkDeviceReplicationLogs");
+        });
+
+        modelBuilder.Entity<CalTestScanRateTable>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__cal_test__3214EC07F2347198");
+
+            entity.ToTable("cal_test_scan_rate_table");
+
+            entity.Property(e => e.AdxId).HasColumnName("ADX_Id");
+            entity.Property(e => e.CTagId).HasColumnName("C_Tag_Id");
+            entity.Property(e => e.CTagName).HasColumnName("C_Tag_Name");
+            entity.Property(e => e.CalculatedMappedName).HasColumnName("Calculated_Mapped_Name");
+            entity.Property(e => e.HeartBeatRate).HasColumnName("Heart_Beat_Rate");
+            entity.Property(e => e.IsKpitag).HasColumnName("isKPITag");
+            entity.Property(e => e.IsTotalizer).HasColumnName("Is_Totalizer");
+            entity.Property(e => e.PublishRate).HasColumnName("Publish_Rate");
+            entity.Property(e => e.Rn).HasColumnName("rn");
+            entity.Property(e => e.ScanInterval).HasColumnName("Scan_Interval");
+            entity.Property(e => e.ScanRate).HasColumnName("Scan_Rate");
+            entity.Property(e => e.SiteIdFk).HasColumnName("site_id_fk");
+            entity.Property(e => e.TagType).HasColumnName("Tag_Type");
+            entity.Property(e => e.TotalizerReferenceId).HasColumnName("Totalizer_Reference_Id");
         });
 
         modelBuilder.Entity<CalculatedTag>(entity =>
@@ -4489,6 +4519,8 @@ public partial class OmniConnectDB : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("Created_Date");
             entity.Property(e => e.DatabaseName).HasMaxLength(200);
+            entity.Property(e => e.Jsonpath).HasColumnName("JSONPath");
+            entity.Property(e => e.Jsonresult).HasColumnName("JSONResult");
             entity.Property(e => e.TableName).HasMaxLength(200);
             entity.Property(e => e.UniqueKeyName).HasMaxLength(200);
             entity.Property(e => e.UpdatedBy).HasColumnName("Updated_By");
@@ -4744,6 +4776,8 @@ public partial class OmniConnectDB : DbContext
             entity.HasKey(e => e.LogId).HasName("PK__ExportJo__5E5499A8366FF124");
 
             entity.ToTable("ExportJobExecutionLog");
+
+            entity.HasIndex(e => e.ExecutionId, "IX_ExportJobExecutionLog_ExecutionID");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.Duration).HasMaxLength(50);

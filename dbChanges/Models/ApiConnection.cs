@@ -50,4 +50,8 @@ public partial class ApiConnection
     public string? Payload { get; set; }
 
     public string? SiteName { get; set; }
+
+    public string? StartPath { get; set; }
+
+    public string? EndPath { get; set; }
 }

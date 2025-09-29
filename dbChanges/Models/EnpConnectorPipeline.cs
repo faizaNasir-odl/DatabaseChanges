@@ -33,6 +33,10 @@ public partial class EnpConnectorPipeline
 
     public string? PipelineName { get; set; }
 
+    public string? Jsonpath { get; set; }
+
+    public string? Jsonresult { get; set; }
+
     public virtual EnpConnectorConnector Connector { get; set; } = null!;
 
     public virtual ICollection<EnpConnectorPipelineMapping> EnpConnectorPipelineMappings { get; set; } = new List<EnpConnectorPipelineMapping>();
